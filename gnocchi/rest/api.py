@@ -239,7 +239,8 @@ class ArchivePolicyController(rest.RestController):
                 voluptuous.All([{
                     "granularity": Timespan,
                     "points": PositiveNotNullInt,
-                    "timespan": Timespan}], voluptuous.Length(min=1)),
+                    "timespan": Timespan,
+                    voluptuous.Optional("name"): six.text_type}], voluptuous.Length(min=1)),
             }))
         # Validate the data
         try:

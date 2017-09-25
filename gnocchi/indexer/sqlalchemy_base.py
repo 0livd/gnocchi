@@ -151,7 +151,8 @@ class SetType(sqlalchemy_utils.JSONType):
 class ArchivePolicy(Base, GnocchiBase, archive_policy.ArchivePolicy):
     __tablename__ = 'archive_policy'
 
-    name = sqlalchemy.Column(sqlalchemy.String(255), primary_key=True)
+    id = sqlalchemy.Column(sqlalchemy_utils.UUIDType(), primary_key=True)
+    name = sqlalchemy.Column(sqlalchemy.String(255), unique=True, nullable=False)
     back_window = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
     definition = sqlalchemy.Column(ArchivePolicyDefinitionType, nullable=False)
     # TODO(jd) Use an array of string instead, PostgreSQL can do that
@@ -170,12 +171,12 @@ class Metric(Base, GnocchiBase, storage.Metric):
 
     id = sqlalchemy.Column(sqlalchemy_utils.UUIDType(),
                            primary_key=True)
-    archive_policy_name = sqlalchemy.Column(
-        sqlalchemy.String(255),
+    archive_policy_id = sqlalchemy.Column(
+        sqlalchemy_utils.UUIDType(),
         sqlalchemy.ForeignKey(
-            'archive_policy.name',
+            'archive_policy.id',
             ondelete="RESTRICT",
-            name="fk_metric_ap_name_ap_name"),
+            name="fk_metric_ap_id_ap_id"),
         nullable=False)
     archive_policy = sqlalchemy.orm.relationship(ArchivePolicy, lazy="joined")
     creator = sqlalchemy.Column(sqlalchemy.String(255))

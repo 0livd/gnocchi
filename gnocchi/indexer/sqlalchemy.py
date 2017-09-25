@@ -604,6 +604,7 @@ class SQLAlchemyIndexer(indexer.IndexerDriver):
 
     def create_archive_policy(self, archive_policy):
         ap = ArchivePolicy(
+            id=archive_policy.id,
             name=archive_policy.name,
             back_window=archive_policy.back_window,
             definition=archive_policy.definition,
